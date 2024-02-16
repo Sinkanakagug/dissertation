@@ -1,9 +1,6 @@
 from helpers import Helpers, generate_random_solution, generate_neighbour
 import numpy as np
 
-MIN = -2.048
-MAX = 2.048
-DIMENSION = 2
 SCALE = 0.02
 NUM_OF_NEIGHBOURS = 20
 BRANCHING_FACTOR = 10
@@ -13,7 +10,7 @@ helpers = Helpers()
 
 def start_rgb():
     #Generate a starting solution
-    solution = generate_random_solution(DIMENSION, MIN, MAX)
+    solution = generate_random_solution()
     best_solution = solution.copy()
     best_value = helpers.rosenbrock(solution)
 
@@ -52,7 +49,7 @@ def evaluate_neighbours(solution, value):
     best_value = value
 
     for i in range(NUM_OF_NEIGHBOURS):
-        neighbour = generate_neighbour(solution, MIN, MAX, SCALE)
+        neighbour = generate_neighbour(solution, SCALE)
         neighbour_value = helpers.rosenbrock(neighbour)
 
         if neighbour_value < best_value:
@@ -78,7 +75,7 @@ def split_branch(solution):
         branch = solution.copy()
         for i in range(len(branch)):
             perturbation = np.random.uniform(low=-BRANCHING_SCALE, high=BRANCHING_SCALE)
-            branch[i] = np.clip(branch[i] + perturbation, MIN, MAX)  # Ensure values stay within bounds
+            branch[i] = np.clip(branch[i] + perturbation, helpers.min, helpers.max)  # Ensure values stay within bounds
         branches.append(branch)
     
     return branches
