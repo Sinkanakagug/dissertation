@@ -18,10 +18,10 @@ class Helpers:
         for i in range(len(x) - 1):
             sum_val += 100 * (x[i + 1] - x[i]**2)**2 + (1 - x[i])**2
         return sum_val
-    
+
     def evaluate_population(self, population):
         evaluated_population = []
-        #Evaluate every solution in the population, return list of tuples matching solution with fitness
+        # Evaluate every solution in the population, return list of tuples matching solution with fitness
         for i in range(len(population)):
             solution_fitness = self.rosenbrock(population[i])
             evaluated_population.append((population[i], solution_fitness))
@@ -48,8 +48,15 @@ def generate_neighbour(solution, scale):
         neighbour[i] = np.clip(neighbour[i] + perturbation, MIN, MAX)
     return neighbour
 
+
 def fitness_sort_variable(tuple):
     return tuple[1]
 
+
 def get_random_number_in_range():
     return random.uniform(MIN, MAX)
+
+#For PSO, give each solution in population a starting velocity of 0
+def attach_zero_velocities(population):
+    for i in range(len(population)):
+        population[i] = (population[i], np.zeros(DIMENSION))

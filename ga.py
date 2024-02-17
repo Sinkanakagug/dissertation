@@ -4,7 +4,7 @@ import random
 
 helpers = Helpers()
 
-POP_SIZE = 8
+POP_SIZE = 32
 ERROR_THRESHOLD = 10 ** -5
 MUTATION_RATE = 0.2
 
@@ -28,7 +28,6 @@ def start_ga():
         
         population = mate_parents(parents)
         mutate_population(population)
-        print(population)
     
     print(best_solution)
     print(best_solution_value)
@@ -60,7 +59,7 @@ def mate_parents(parents):
         mother, father = parents[i], parents[i + 1]
         child1, child2 = mate(mother, father)
 
-        mated_population.append([mother, father, child1, child2])
+        mated_population.extend([mother, father, child1, child2])
     
     return mated_population
 
@@ -89,3 +88,5 @@ def mutate_population(population):
                 population[i][j] = get_random_number_in_range()
     
     return population
+
+start_ga()
