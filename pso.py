@@ -1,31 +1,57 @@
-from helpers import Helpers, generate_random_population, attach_zero_velocities
+from helpers import Helpers, generate_random_population
 import numpy as np
 import random
 
 helpers = Helpers()
 
-POP_SIZE = 10
+POP_SIZE = 20
 C1 = 2
 C2 = 2
+TERMINATION_NUMBER = 5000
 
 def start_pso():
+    counter = 0
     population = generate_random_population(POP_SIZE)
     pop_best_positions = population.copy()
     pop_best_values = [helpers.rosenbrock(p) for p in population]
-    global_best_position = pop_best_positions[pop_best_values.index(min(pop_best_values))]
+    best_value_index = pop_best_values.index(min(pop_best_values))
+    global_best_position = pop_best_positions[best_value_index]
+    global_best_value = pop_best_values[best_value_index]
 
     #Assign a velocity of 0 to each of the starting pop
+    #TODO: CHANGE TO RANDOM VELOCITIES
     attach_zero_velocities(population)
 
-    print(population)
+    while counter < TERMINATION_NUMBER:
+        #Population is upadted with new velocities (not moved yet)
+        population = update_all_solution_velocities(population, pop_best_positions, global_best_position)
 
-    #Population is upadted with new velocities (not moved yet)
-    population = update_all_solution_velocities(population, pop_best_positions, global_best_position)
+        #Move population according to new velocities (in place)
+        move_population(population)
 
-    #Move population according to new velocities (in place)
-    move_population(population)
+        #Calculate fitness of population current positions
+        current_positions = remove_velocity_from_population(population)
+        current_position_fitnesses = helpers.evaluate_population(current_positions)
 
-    print(population)
+        #Update any population best positions in place
+        update_population_bests(current_position_fitnesses, pop_best_positions, pop_best_values)
+
+        #Update global best positions
+        best_value_index = pop_best_values.index(min(pop_best_values))
+        if pop_best_values[best_value_index] > global_best_value:
+            global_best_position = pop_best_positions[best_value_index]
+            global_best_value = pop_best_values[best_value_index]
+
+            #If globals updated, reset termination counter
+            counter = 0
+            continue
+
+        counter = counter + 1
+    
+    print(global_best_position)
+    print(global_best_value)
+    print('Number of evaluations: ' + str(helpers.evaluation_counter))
+
 
 def update_all_solution_velocities(population, pop_best_positions, global_best_position):
     new_population = []
@@ -65,5 +91,25 @@ def move_solution(solution):
         position[i] = position[i] + velocity[i]
     
     return (position, velocity)
+
+#Return just the positions, free from velocities to be evaluated
+def remove_velocity_from_population(population):
+    return [solutions for solutions, _ in population]
+
+def update_population_bests(current_position_fitnesses, pop_best_positions, pop_best_values):
+    #Go through each particle
+    for i in range(len(current_position_fitnesses)):
+        #If the particles new position is better than the previous best
+        if current_position_fitnesses[i][1] < pop_best_values[i]:
+            print('here')
+            #Replace it
+            pop_best_positions[i] = current_position_fitnesses[i][0]
+            pop_best_values[i] = current_position_fitnesses[i][1]
+
+#Give each solution in population a starting velocity of 0
+def attach_zero_velocities(population):
+    dimension = len(population[0])
+    for i in range(len(population)):
+        population[i] = (population[i], np.zeros(dimension))
 
 start_pso()

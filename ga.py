@@ -4,7 +4,7 @@ import random
 
 helpers = Helpers()
 
-POP_SIZE = 32
+POP_SIZE = 16
 ERROR_THRESHOLD = 10 ** -5
 MUTATION_RATE = 0.2
 
