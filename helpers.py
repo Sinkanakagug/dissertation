@@ -19,36 +19,10 @@ class Helpers:
             sum_val += 100 * (x[i + 1] - x[i]**2)**2 + (1 - x[i])**2
         return sum_val
 
-    #Take a list of solutions and add a fitness
-    def evaluate_population(self, population):
-        evaluated_population = []
-        # Evaluate every solution in the population, return list of tuples matching solution with fitness
-        for i in range(len(population)):
-            solution_fitness = self.rosenbrock(population[i])
-            evaluated_population.append((population[i], solution_fitness))
-        return evaluated_population
 
-
-def generate_random_solution():
-    solution = np.random.rand(DIMENSION) * (MAX * 2) + MIN
-    return solution
-
-
-def generate_random_population(pop_size):
-    population = []
-    for i in range(pop_size):
-        population.append(generate_random_solution())
-    return population
-
-
-def generate_neighbour(solution, scale):
-    neighbour = solution.copy()
-    for i in range(len(neighbour)):
-        perturbation = np.random.uniform(low=-scale, high=scale)
-        # Ensure values stay within bounds
-        neighbour[i] = np.clip(neighbour[i] + perturbation, MIN, MAX)
-    return neighbour
-
+def generate_random_array(dimenion=DIMENSION, max=MAX, min=MIN):
+    arr = np.random.rand(dimenion) * (max * 2) + min
+    return arr
 
 def fitness_sort_variable(tuple):
     return tuple[1]
@@ -56,3 +30,14 @@ def fitness_sort_variable(tuple):
 
 def get_random_number_in_range():
     return random.uniform(MIN, MAX)
+
+def generate_starting_population(helpers, pop_size, solution_type):
+    population = []
+
+    #Create a new solution for pop size
+    for i in range(pop_size):
+        from solution_factory import SolutionFactory
+        solution = SolutionFactory.create_solution(solution_type, helpers)
+        population.append(solution)
+    
+    return population

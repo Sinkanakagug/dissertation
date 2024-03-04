@@ -1,84 +1,30 @@
-from helpers import Helpers, generate_random_solution, generate_neighbour
+from helpers import Helpers
 import numpy as np
+from algorithm import Algorithm
+from branch import Branch
+from solution_factory import SolutionFactory
 
-SCALE = 0.02
-NUM_OF_NEIGHBOURS = 20
-BRANCHING_FACTOR = 10
-BRANCHING_SCALE = 0.1
+class RGB(Algorithm):
+    def run(self, neighbour_scale: float, num_of_neighbours: int, branching_factor: int, branching_scale: float):
+        helpers = Helpers()
+        starting_solution = SolutionFactory.create_solution(Branch, helpers)
+        best_solution = starting_solution
 
-helpers = Helpers()
+        stack: list[Branch] = []
+        stack.append(starting_solution)
 
-def start_rgb():
-    #Generate a starting solution
-    solution = generate_random_solution()
-    best_solution = solution.copy()
-    best_value = helpers.rosenbrock(solution)
+        while len(stack) > 0:
+            current_solution = stack.pop()
+            best_neighbour = current_solution.grow_branch(num_of_neighbours, neighbour_scale, self.max, self.min)
 
-    #Add the starting solution to the stack
-    stack = []
-    stack.append(best_solution)
+            if best_neighbour.value < best_solution.value:
+                best_solution = best_neighbour
 
-    #The exit conditon is if we run out of values in the stack
-    while len(stack) > 0:
-        #Evaluate the current solution in the stack
-        current_solution = stack.pop()
-        current_solution_value = helpers.rosenbrock(current_solution)
+                branches = best_solution.split_branch(branching_factor, branching_scale, self.min, self.max)
 
-        #Grow its brach to explore the local area
-        best_neighbour, best_neighbour_value = grow_branch(current_solution, current_solution_value)
-
-        #If its the best one we have ever found
-        if best_neighbour_value < best_value:
-            #Set it as best
-            best_solution = best_neighbour
-            best_value = best_neighbour_value
-
-            #Generate branches for it
-            branches = split_branch(best_solution)
-
-            #Add them to the stack
-            for b in branches:
-                stack.append(b)
-
-    print(best_solution)
-    print(best_value)
-    print('Number of evaluations: ' + str(helpers.evaluation_counter))
-
-def evaluate_neighbours(solution, value):
-    best_solution = solution
-    best_value = value
-
-    for i in range(NUM_OF_NEIGHBOURS):
-        neighbour = generate_neighbour(solution, SCALE)
-        neighbour_value = helpers.rosenbrock(neighbour)
-
-        if neighbour_value < best_value:
-            best_solution = neighbour
-            best_value = neighbour_value
-
-    return best_solution, best_value
-
-def grow_branch(solution, solution_value):
-    neighbour, neighbour_value = evaluate_neighbours(solution, solution_value)
-
-    while(neighbour_value < solution_value):
-        solution = neighbour
-        solution_value = neighbour_value
-
-        neighbour, neighbour_value = evaluate_neighbours(solution, solution_value)
-    
-    return solution, solution_value
-
-def split_branch(solution):
-    branches = []
-    for i in range(BRANCHING_FACTOR):
-        branch = solution.copy()
-        for i in range(len(branch)):
-            perturbation = np.random.uniform(low=-BRANCHING_SCALE, high=BRANCHING_SCALE)
-            branch[i] = np.clip(branch[i] + perturbation, helpers.min, helpers.max)  # Ensure values stay within bounds
-        branches.append(branch)
-    
-    return branches
-
-
-start_rgb()
+                for b in branches:
+                    stack.append(b)
+        
+        print(best_solution.solution)
+        print(best_solution.value)
+        print('Number of evaluations: ' + str(helpers.evaluation_counter))
