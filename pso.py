@@ -1,7 +1,4 @@
-from helpers import Helpers, generate_random_array, MIN, MAX, generate_starting_population
-from solution import Solution
-import numpy as np
-import random
+from helpers import Helpers, generate_starting_population
 from algorithm import Algorithm, get_best_solution_from_population
 from particle import Particle
 

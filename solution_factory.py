@@ -22,5 +22,7 @@ class SolutionFactory:
             
             return Branch(helpers)
         
-        if solution_type == AnnealingSolution:            
+        if solution_type == AnnealingSolution:  
+            if len(solution) > 0:
+                return AnnealingSolution(helpers, solution)          
             return AnnealingSolution(helpers)

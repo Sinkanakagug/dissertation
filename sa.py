@@ -25,7 +25,7 @@ class SA(Algorithm):
 
                 error_difference = neighbour.value - current_solution.value
 
-                probability = math.exp(error_difference / temperature)
+                probability = math.exp(-error_difference / temperature)
 
                 if random.random() < probability:
                     current_solution = neighbour

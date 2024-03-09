@@ -1,13 +1,12 @@
-from helpers import Helpers, generate_starting_population, fitness_sort_variable, get_random_number_in_range, generate_random_array
-from solution import Solution
-import numpy as np
+from helpers import Helpers, generate_starting_population
 import random
 from algorithm import Algorithm, sort_population, get_best_solution_from_population
 from genetic_solution import GeneticSolution
 from solution_factory import SolutionFactory
+from result import Result
 
 class GA(Algorithm):
-    def run(self, pop_size: int, mutation_rate: float, termination_number: int):
+    def run(self, pop_size: int, mutation_rate: float, termination_number: int) -> Result:
         self.helpers = Helpers()
         counter = 0
         population = generate_starting_population(self.helpers, pop_size, GeneticSolution)
@@ -34,9 +33,7 @@ class GA(Algorithm):
             population = self.allow_population_to_mutate(population, mutation_rate)
             counter += 1
 
-        print(self.helpers.evaluation_counter)
-        print(best_solution)
-        print(best_solution_value)
+        return Result(self.helpers.evaluation_counter, best_solution_value, self.helpers.error_threshold_number, best_solution)
     
     def mate(self, mother: GeneticSolution, father: GeneticSolution) -> tuple[GeneticSolution, GeneticSolution]:
         child1_solution = []
