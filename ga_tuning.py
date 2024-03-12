@@ -10,6 +10,8 @@ class GATuning(ParameterTuning):
     def run(self, pop_size: Parameter, mutation_rate: Parameter, termination_number: Parameter):
         ga = GA(self.dimension, self.max, self.min)
 
+        self.calculate_progress_start([pop_size, mutation_rate, termination_number])
+
         pop_size.current = pop_size.start
 
         #Run nested loops, trying every combination of parameters
@@ -28,6 +30,8 @@ class GATuning(ParameterTuning):
                     averages = TuningAverageResults(results)
 
                     self.evaluate_averages(averages, [pop_size, mutation_rate, termination_number])
+
+                    self.update_progress()
 
                     termination_number.increment_parameter()
                 
