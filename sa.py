@@ -2,13 +2,14 @@ from algorithm import Algorithm
 from helpers import Helpers
 from annealing_solution import AnnealingSolution
 from solution_factory import SolutionFactory
+from result import Result
 import math
 import random
 
 class SA(Algorithm):
     def run(self, temperature: float, cooling_rate: float, iterations_per_temperature: int, neighbour_scale: float):
-        helpers = Helpers()
-        current_solution: AnnealingSolution = SolutionFactory.create_solution(AnnealingSolution, helpers)
+        self.helpers = Helpers()
+        current_solution: AnnealingSolution = SolutionFactory.create_solution(AnnealingSolution, self.helpers)
         best_solution: AnnealingSolution = current_solution
 
         while temperature > 0:
@@ -32,6 +33,4 @@ class SA(Algorithm):
             
             temperature -= cooling_rate
         
-        print(best_solution.solution)
-        print(best_solution.value)
-        print('Number of evaluations: ' + str(helpers.evaluation_counter))
+        return Result(self.helpers.evaluation_counter, best_solution.value, self.helpers.error_threshold_number, best_solution.solution)

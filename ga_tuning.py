@@ -39,6 +39,5 @@ class GATuning(ParameterTuning):
         
             pop_size.increment_parameter()
 
-        print(f'Best parameters for accuracy: {str(self.best_average_value)}')
-        print(f'Best parameters for fast accuracy: {str(self.best_average_error_threshold_number)}')
-        print(f'Best parameters for success rate: {str(self.best_success_percentage)}')
+        output = [f"{obj['name']}: {obj['current']}" for obj in self.best_params]
+        print(f'Best parameters: {output} - {str(self.best_success_percentage)} - {str(self.best_average_error_threshold_number)}')

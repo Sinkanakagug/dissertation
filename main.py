@@ -3,6 +3,9 @@ from pso import PSO
 from rgb import RGB
 from sa import SA
 from ga_tuning import GATuning
+from pso_tuning import PSOTuning
+from sa_tuning import SATuning
+from rgb_tuning import RGBTuning
 from parameter import Parameter
 
 MAX = 2.048
@@ -10,19 +13,46 @@ MIN = -2.048
 DIMENSION = 2
 ITERATIONS_PER_PARAM = 5
 
+#Genetic algorithm tuning
+# pop_size = Parameter('pop_size', start=50, increment=10, max=300)
+# mutation_rate = Parameter('mutation_rate', start=0, increment=0.001, max=0.01)
+# termination_number = Parameter('termination_number', start=50, increment=50, max=400)
 
-pop_size = Parameter('pop_size', start=4, increment=2, max=200)
-mutation_rate = Parameter('mutation_rate', start=0, increment=0.05, max=0.9)
-termination_number = Parameter('termination_number', start=50, increment=10, max=500)
+# ga_tuning = GATuning(DIMENSION, MAX, MIN, ITERATIONS_PER_PARAM)
+# ga_tuning.run(pop_size, mutation_rate, termination_number)
 
-ga_tuning = GATuning(DIMENSION, MAX, MIN, ITERATIONS_PER_PARAM)
-ga_tuning.run(pop_size, mutation_rate, termination_number)
+#Particle swarm optimisation tuning
+# pop_size = Parameter('pop_size', start=10, increment=20, max=400)
+# max_velocity = Parameter('max_velocity', start=0.1, increment=0.1, max=1)
+# min_velocity = Parameter('min_velocity', start=-0.1, increment=-0.1, max=-1)
+# termination_number = Parameter('termination_number', start=50, increment=50, max=400)
+
+# pso_tuning = PSOTuning(DIMENSION, MAX, MIN, ITERATIONS_PER_PARAM)
+# pso_tuning.run(pop_size, max_velocity, min_velocity, termination_number)
+
+#Simulated annealing tuning
+# temperature = Parameter('temperature', start=50, increment=50, max=300)
+# cooling_rate = Parameter('cooling_rate', start=1, increment=2, max=10)
+# iterations_per_temperature = Parameter('iterations_per_temperature', start=80, increment=20, max=200)
+# neighbour_scale = Parameter('neighbour_scale', start=0.01, increment=0.01, max=0.2)
+
+# sa_tuning = SATuning(DIMENSION, MAX, MIN, ITERATIONS_PER_PARAM)
+# sa_tuning.run(temperature, cooling_rate, iterations_per_temperature, neighbour_scale)
+
+#Random growing branches tuning
+neighbour_scale = Parameter('neighbour_scale', start=0.01, increment=0.01, max=0.03)
+num_of_neighbours = Parameter('num_of_neighbours', start=5, increment=5, max=50)
+branching_factor = Parameter('branching_factor', start=2, increment=2, max=40)
+branching_scale = Parameter('branching_scale', start=0.05, increment=0.05, max=0.2)
+
+rgb_tuning = RGBTuning(DIMENSION, MAX, MIN, ITERATIONS_PER_PARAM)
+rgb_tuning.run(neighbour_scale, num_of_neighbours, branching_factor, branching_scale)
 
 # ga = GA(DIMENSION, MAX, MIN)
 # result = ga.run(100, 0, 500)
 
 # pso = PSO(DIMENSION, MAX, MIN)
-# pso.run(400, 1, -1, 200)
+# result = pso.run(12, 1, -1, 200)
 
 # rgb = RGB(DIMENSION, MAX, MIN)
 # rgb.run(0.02, 20, 10, 0.1)

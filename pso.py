@@ -1,6 +1,7 @@
 from helpers import Helpers, generate_starting_population
 from algorithm import Algorithm, get_best_solution_from_population
 from particle import Particle
+from result import Result
 
 class PSO(Algorithm):
     def run(self, pop_size: int, max_velocity: float, min_velocity: float, termination_number: int):
@@ -32,9 +33,7 @@ class PSO(Algorithm):
 
             counter += 1
         
-        print(self.helpers.evaluation_counter)
-        print(global_best_position)
-        print(global_best_value)
+        return Result(self.helpers.evaluation_counter, global_best_value, self.helpers.error_threshold_number, best_particle.solution)
 
     def update_population(self, global_best_position: list, max_velocity: float, min_velocity: float):
         for i in range(len(self.population)):

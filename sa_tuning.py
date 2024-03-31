@@ -10,6 +10,8 @@ class SATuning(ParameterTuning):
     def run(self, temperature: Parameter, cooling_rate: Parameter, iterations_per_temperature: Parameter, neighbour_scale: Parameter):
         sa = SA(self.dimension, self.max, self.min)
 
+        self.calculate_progress_start([temperature, cooling_rate, iterations_per_temperature, neighbour_scale])
+
         temperature.current = temperature.start
 
         #Run nested loops
@@ -32,6 +34,8 @@ class SATuning(ParameterTuning):
 
                         self.evaluate_averages(averages, [temperature, cooling_rate, iterations_per_temperature, neighbour_scale])
 
+                        self.update_progress()
+
                         neighbour_scale.increment_parameter()
 
                     iterations_per_temperature.increment_parameter()
@@ -40,6 +44,5 @@ class SATuning(ParameterTuning):
 
             temperature.increment_parameter()
 
-        print(f'Best parameters for accuracy: {str(self.best_average_value)}')
-        print(f'Best parameters for fast accuracy: {str(self.best_average_error_threshold_number)}')
-        print(f'Best parameters for success rate: {str(self.best_success_percentage)}')
+        output = [f"{obj['name']}: {obj['current']}" for obj in self.best_params]
+        print(f'Best parameters: {output} - {str(self.best_success_percentage)} - {str(self.best_average_error_threshold_number)}')

@@ -2,12 +2,13 @@ from helpers import Helpers
 import numpy as np
 from algorithm import Algorithm
 from branch import Branch
+from result import Result
 from solution_factory import SolutionFactory
 
 class RGB(Algorithm):
     def run(self, neighbour_scale: float, num_of_neighbours: int, branching_factor: int, branching_scale: float):
-        helpers = Helpers()
-        starting_solution = SolutionFactory.create_solution(Branch, helpers)
+        self.helpers = Helpers()
+        starting_solution = SolutionFactory.create_solution(Branch, self.helpers)
         best_solution = starting_solution
 
         stack: list[Branch] = []
@@ -25,6 +26,4 @@ class RGB(Algorithm):
                 for b in branches:
                     stack.append(b)
         
-        print(best_solution.solution)
-        print(best_solution.value)
-        print('Number of evaluations: ' + str(helpers.evaluation_counter))
+        return Result(self.helpers.evaluation_counter, best_solution.value, self.helpers.error_threshold_number, best_solution.solution)
