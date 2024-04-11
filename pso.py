@@ -1,15 +1,24 @@
-from helpers import Helpers, generate_starting_population
+from helpers import Helpers, generate_starting_population, generate_single_solution
 from algorithm import Algorithm, get_best_solution_from_population
 from particle import Particle
 from result import Result
 
 class PSO(Algorithm):
-    def run(self, pop_size: int, max_velocity: float, min_velocity: float, termination_number: int):
-        self.helpers = Helpers()
+    def run(self, pop_size: int, max_velocity: float, min_velocity: float, termination_number: int, starting_population: list = [], helpers: Helpers = None):
+        if helpers:
+            self.helpers = helpers
+        else:
+            self.helpers = Helpers()
+
         global_best_position: list = []
         global_best_value: float = -1
         counter: int = 0
-        self.population: list[Particle] = generate_starting_population(self.helpers, pop_size, Particle)
+        self.population: list[Particle] = []
+        if len(starting_population) > 0:
+            particles = self.create_particles_from_branches(starting_population, helpers)
+            self.population = particles
+        else:
+            self.population = generate_starting_population(self.helpers, pop_size, Particle)
 
         #Give each particle a velocity
         self.initialise_velocities(max_velocity, min_velocity)
@@ -42,3 +51,10 @@ class PSO(Algorithm):
     def initialise_velocities(self, max_velocity: float, min_velocity: float):
         for i in range(len(self.population)):
             self.population[i].initialise_velocity(max_velocity, min_velocity)
+    
+    def create_particles_from_branches(self, branches: list, helpers):
+        particles = []
+        for i in range(len(branches)):
+            particles.append(generate_single_solution(helpers, Particle, branches[i].solution))
+        
+        return particles

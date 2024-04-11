@@ -33,13 +33,23 @@ def generate_random_array(dimenion=DIMENSION, max=MAX, min=MIN):
 def get_random_number_in_range():
     return random.uniform(MIN, MAX)
 
-def generate_starting_population(helpers, pop_size, solution_type):
+def generate_starting_population(helpers, pop_size, solution_type, starting_population: list[list[float]]=[]) -> list:
     population = []
 
-    #Create a new solution for pop size
-    for i in range(pop_size):
-        from solution_factory import SolutionFactory
-        solution = SolutionFactory.create_solution(solution_type, helpers)
-        population.append(solution)
+    if len(starting_population) > 0:
+        for i in range(pop_size):
+            from solution_factory import SolutionFactory
+            solution = SolutionFactory.create_solution(solution_type, helpers, solution=starting_population[i])
+            population.append(solution)
+    else:
+        #Create a new solution for pop size
+        for i in range(pop_size):
+            from solution_factory import SolutionFactory
+            solution = SolutionFactory.create_solution(solution_type, helpers)
+            population.append(solution)
     
     return population
+
+def generate_single_solution(helpers, solution_type, solution_numbers):
+    from solution_factory import SolutionFactory
+    return SolutionFactory.create_solution(solution_type, helpers, solution=solution_numbers)

@@ -11,7 +11,7 @@ class Algorithm:
         self.name = ''
 
     @abstractmethod
-    def run(self, **kwargs) -> Result:
+    def run(self, **kwargs):
         pass
     
 def sort_population(population: list[Solution]) -> list[Solution]:
