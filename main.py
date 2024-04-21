@@ -16,6 +16,12 @@ MIN = -2.048
 DIMENSION = 2
 ITERATIONS_PER_PARAM = 10
 
+###################################################################################
+
+#Region 1 - Parameter tuning
+
+###################################################################################
+
 #Genetic algorithm tuning
 # pop_size = Parameter('pop_size', start=50, increment=10, max=300)
 # mutation_rate = Parameter('mutation_rate', start=0, increment=0.001, max=0.01)
@@ -51,9 +57,22 @@ ITERATIONS_PER_PARAM = 10
 # rgb_tuning = RGBTuning(DIMENSION, MAX, MIN, ITERATIONS_PER_PARAM)
 # rgb_tuning.run(neighbour_scale, num_of_neighbours, branching_factor, branching_scale)
 
+###################################################################################
+
+#End of region 1 - Parameter tuning
+
+###################################################################################
+
+
+
+###################################################################################
+
+#Region 2 - Single run of an algorithm
+
+###################################################################################
+
 # ga = GA(DIMENSION, MAX, MIN)
 # result = ga.run(100, 0, 500)
-
 
 # rgb = RGB(DIMENSION, MAX, MIN)
 # result = rgb.run(0.02, 10, 20, 0.05)
@@ -68,9 +87,25 @@ ITERATIONS_PER_PARAM = 10
 # # # sa.run(400, 1, 100, 0.05)
 # print(f'Total evaluations: {result.evaluation_counter} Found acceptable solution at: {result.error_threshold_number} Best value: {result.best_solution_value} Best solution: {result.best_solution}')
 # exit()
+
+###################################################################################
+
+#End of region 2 - Single run of an algorithm
+
+###################################################################################
+
+
+
+###################################################################################
+
+#Region 3 - Data collection
+
+###################################################################################
+
+
 #Data collection
-algorithms = []
-params = []
+# algorithms = []
+# params = []
 
 # ga = GA(DIMENSION, MAX, MIN)
 # ga_params = [130, 0.006, 50]
@@ -84,19 +119,25 @@ params = []
 # sa = SA(DIMENSION, MAX, MIN)
 # sa_params = [100, 1, 160, 0.11]
 
-rgb_mod = RGB_Mod(DIMENSION, MAX, MIN)
-rgb_mod_params = [0.02, 10, 20, 0.05]
+# rgb_mod = RGB_Mod(DIMENSION, MAX, MIN)
+# rgb_mod_params = [0.02, 10, 20, 0.05]
 
 # algorithms.append(ga)
 # algorithms.append(pso)
 # algorithms.append(rgb)
 # algorithms.append(sa)
-algorithms.append(rgb_mod)
+# algorithms.append(rgb_mod)
 
 # params.append(ga_params)
 # params.append(pso_params)
 # params.append(rgb_params)
 # params.append(sa_params)
-params.append(rgb_mod_params)
+# params.append(rgb_mod_params)
 
-experiment = Experiment(algorithms, params)
+# experiment = Experiment(algorithms, params)
+
+###################################################################################
+
+#End of region 3 - Data collection
+
+###################################################################################
